@@ -1,0 +1,15 @@
+{
+    "name": "miiTag",
+    "version": "0.0.1",
+    "type": "extension",
+    "title": "miiTag",
+    "description": "",
+    "license": "",
+    "authors": [
+        {
+            "name": "Michael Tourneur",
+            "email": "michael.tourneur@gmail.com",
+            "homepage": ""
+        }
+    ]
+}

@@ -1,0 +1,51 @@
+@script('miiTag.admin-vocabulary-index', 'extension://miitag/assets/js/admin/vocabulary/index.js', 'requirejs')
+
+<form id="js-vocabularies" class="uk-form" action="@url('@miiTag/admin/vocabulary')" method="post">
+
+    @section('toolbar', 'show')
+        <div class="uk-float-left">
+
+            <a class="uk-button uk-button-primary" href="@url('@miiTag/admin/vocabulary/add')">@trans('Add Vocabulary')</a>
+            <a class="uk-button pk-button-danger uk-hidden js-show-on-select" href="#" data-action="@url('@miiTag/admin/vocabulary/delete')">@trans('Delete')</a>
+
+            <div class="uk-button-dropdown uk-hidden js-show-on-select" data-uk-dropdown="{ mode: 'click' }">
+                <button class="uk-button" type="button">@trans('More') <i class="uk-icon-caret-down"></i></button>
+                <div class="uk-dropdown uk-dropdown-small">
+                    <ul class="uk-nav uk-nav-dropdown">
+                        @foreach($statuses as $key => $status)
+                            <li><a href="#" data-action="@url('@miiTag/admin/vocabulary/status', ['status' => $key])">@($status)</a></li>
+                        @endforeach
+                        <li class="uk-nav-divider"></li>
+                        <li><a href="#" data-action="@url('@miiTag/admin/vocabulary/copy')">@trans('Copy')</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="uk-float-right uk-hidden-small">
+
+            <select name="filter[status]">
+                <option value="">- @trans('Status') -</option>
+                @foreach ($statuses as $id => $status)
+                <option value="@( $id )"@( is_numeric($filter['status']) && $filter['status'] == $id ? ' selected' : '')>@( $status )</option>
+                @endforeach
+            </select>
+
+            <input type="text" name="filter[search]" placeholder="@trans('Search')" value="@( $filter['search'] )">
+
+        </div>
+    @endsection
+
+    <p class="uk-alert uk-alert-info @( $vocabularies ? 'uk-hidden' : '' )">@trans('No vocabulary found.')</p>
+
+    <div class="js-table uk-overflow-container">
+        @include('extension://miitag/views/admin/vocabulary/table.razr')
+    </div>
+
+    <ul class="uk-pagination @( $total < 2 ? 'uk-hidden' : '' )" data-uk-pagination="{ pages: @( $total ) }"></ul>
+
+    @token
+
+    <input type="hidden" name="page" value="0">
+
+</form>

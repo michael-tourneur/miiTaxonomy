@@ -1,0 +1,37 @@
+@if ($vocabularies)
+<table class="uk-table uk-table-hover uk-table-middle">
+    <thead>
+        <tr>
+            <th class="pk-table-width-minimum"><input type="checkbox" class="js-select-all"></th>
+            <th class="pk-table-min-width-200">@trans('Name')</th>
+            <th class="pk-table-min-width-200">@trans('Description')</th>
+            <th class="pk-table-width-100 uk-text-center">@trans('Status')</th>
+            <th class="pk-table-width-200 pk-table-min-width-200">@trans('Tags')</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($vocabularies as $vocabulary)
+        <tr>
+            <td>
+                <input type="checkbox" name="ids[]" class="js-select" value="@( $vocabulary.id )">
+            </td>
+            <td>
+                <a href="@url('@miiTag/admin/vocabulary/edit', ['id' => $vocabulary.id])">@( $vocabulary.name )</a>
+            </td>
+            <td>@( $vocabulary.description )</td>
+            <td class="uk-text-center">
+                @if ($vocabulary.status == constant('STATUS_ACTIVATED', $vocabulary))
+                    <i class="uk-icon-circle uk-text-success"></i>
+                @elseif ($vocabulary.status == constant('STATUS_DEACTIVATED', $vocabulary))
+                    <i class="uk-icon-circle uk-text-warning"></i>
+                @endif
+            </td>
+            <td class="pk-table-text-break">
+                @set( $link = url('@miiTag/admin/vocabulary/id/tag', ['id' => $vocabulary.id], 'base') )
+                <a href="@url('@miiTag/admin/vocabulary/id/tag', ['id' => $vocabulary.id])">@( urldecode($link) )</a>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+@endif
