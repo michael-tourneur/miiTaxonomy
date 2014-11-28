@@ -1,0 +1,32 @@
+@if ($terms)
+<table class="uk-table uk-table-hover uk-table-middle">
+    <thead>
+        <tr>
+            <th class="pk-table-width-minimum"><input type="checkbox" class="js-select-all"></th>
+            <th class="pk-table-min-width-200">@trans('Name')</th>
+            <th class="pk-table-min-width-200">@trans('Description')</th>
+            <th class="uk-text-center">@trans('Status')</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($terms as $term)
+        <tr>
+            <td>
+                <input type="checkbox" name="ids[]" class="js-select" value="@( $term.id )">
+            </td>
+            <td>
+                <a href="@url('@miiTaxonomy/admin/term/edit', ['id' => $term.id])">@( $term.name )</a>
+            </td>
+            <td>@( $term.getExcerpt() )</td>
+            <td class="uk-text-center">
+                @if ($term.status == constant('STATUS_ACTIVATED', $term))
+                    <i class="uk-icon-circle uk-text-success"></i>
+                @elseif ($term.status == constant('STATUS_DEACTIVATED', $term))
+                    <i class="uk-icon-circle uk-text-warning"></i>
+                @endif
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+@endif

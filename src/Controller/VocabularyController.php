@@ -1,22 +1,22 @@
 <?php
 
-namespace Mii\Tag\Controller;
+namespace Mii\Taxonomy\Controller;
 
-use Mii\Tag\MiiTagExtension;
-use Mii\Tag\Entity\Vocabulary;
+use Mii\Taxonomy\MiiTaxonomyExtension;
+use Mii\Taxonomy\Entity\Vocabulary;
 use Pagekit\Component\Database\ORM\Repository;
 use Pagekit\Framework\Controller\Controller;
 use Pagekit\Framework\Controller\Exception;
 use Doctrine\DBAL\DBALException;
 
 /**
-* @Route(name="@miiTag/admin/vocabulary")
-* @Access("miiTag: manage vocabularies", admin=true)
+* @Route(name="@miiTaxonomy/admin/vocabulary")
+* @Access("miiTaxonomy: manage vocabularies", admin=true)
 */
 class VocabularyController extends Controller
 {
   /**
-  * @var MiiTagExtension
+  * @var MiiTaxonomyExtension
   */
   protected $extension;
 
@@ -28,38 +28,44 @@ class VocabularyController extends Controller
   /**
   * Constructor.
   */
-  public function __construct(MiiTagExtension $extension)
+  public function __construct(MiiTaxonomyExtension $extension)
   {
     $this->extension    = $extension;
-    $this->vocabularies  = $this['db.em']->getRepository('Mii\Tag\Entity\Vocabulary');
+    $this->vocabularies  = $this['db.em']->getRepository('Mii\Taxonomy\Entity\Vocabulary');
   }
 
   /**
   * @Request({"filter": "array", "page":"int"})
-  * @Response("extension://miitag/views/admin/vocabulary/index.razr")
+  * @Response("extension://miitaxonomy/views/admin/vocabulary/index.razr")
   */
   public function indexAction($filter = null, $page = 0)
   {
     $query = $this->vocabularies->query();
 
     if (isset($filter['status']) && is_numeric($filter['status'])) {
+
       $query->where(['status' => intval($filter['status'])]);
+
     }
 
     if (isset($filter['search']) && strlen($filter['search'])) {
+
       $query->where(['name LIKE :search OR description LIKE :search'], ['search' => "%{$filter['search']}%"]);
+      
     }
 
 
-    $limit = $this->extension->getConfig('index.items_per_page', 15);
+    $limit = $this->extension->getConfig('index_items_per_page', 15);
     $count = $query->count();
     $total = ceil($count / $limit);
     $page  = max(0, min($total - 1, $page));
-    $vocabularies = $query->offset($page * $limit)->limit($limit)->orderBy('name', 'ASC')->get();
+    $vocabularies = $query->related(['tags'])->offset($page * $limit)->limit($limit)->orderBy('id', 'ASC')->get();
+
+    $vocabularies = $this['miiTaxonomy.api']->taxonomy_vocabulary_load_multiple([1,2]);
 
     if ($this['request']->isXmlHttpRequest()) {
       return $this['response']->json([
-        'table' => $this['view']->render('extension://miitag/views/admin/vocabulary/table.razr', compact('count', 'vocabularies')),
+        'table' => $this['view']->render('extension://miitaxonomy/views/admin/vocabulary/table.razr', compact('count', 'vocabularies')),
         'total' => $total
       ]);
     }
@@ -74,7 +80,7 @@ class VocabularyController extends Controller
   }
 
   /**
-  * @Response("extension://miitag/views/admin/vocabulary/edit.razr")
+  * @Response("extension://miitaxonomy/views/admin/vocabulary/edit.razr")
   */
   public function addAction()
   {
@@ -119,7 +125,7 @@ class VocabularyController extends Controller
 
   /**
   * @Request({"id": "int"})
-  * @Response("extension://miitag/views/admin/vocabulary/edit.razr")
+  * @Response("extension://miitaxonomy/views/admin/vocabulary/edit.razr")
   */
   public function editAction($id)
   {
@@ -133,7 +139,7 @@ class VocabularyController extends Controller
 
       $this['message']->error($e->getMessage());
 
-      return $this->redirect('@miiTag/admin/vocabulary');
+      return $this->redirect('@miiTaxonomy/admin/vocabulary');
     }
 
     return [
@@ -157,33 +163,6 @@ class VocabularyController extends Controller
     }
 
     return ['message' => _c('{0} No vocabulary deleted.|{1} Vocabulary deleted.|]1,Inf[ Vocabularies deleted.', count($ids))];
-  }
-
-  /**
-  * @Request({"ids": "int[]"}, csrf=true)
-  * @Response("json")
-  */
-  public function copyAction($ids = [])
-  {
-    foreach ($ids as $id) {
-      if ($vocabulary = $this->vocabularies->find((int) $id)) {
-
-        $clone = clone $vocabulary;
-        $clone->setId(null);
-        $clone->setStatus($vocabulary->getStatus());
-        $clone->setName($vocabulary->getName().' - '.__('Copy'));
-        $clone->setDescription($vocabulary->getDescription());
-
-        try {
-          $this->vocabularies->save($clone);
-        } catch (DBALException $e) {
-          return ['message' => 'Something happens. Vocabulary cannot be saved.', 'error' => true];
-        }
-
-      }
-    }
-
-    return ['message' => _c('{0} No vocabulary copied.|{1} Vocabulary copied.|]1,Inf[ Vocabularies copied.', count($ids))];
   }
 
   /**

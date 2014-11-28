@@ -1,6 +1,6 @@
 require(['jquery', 'uikit!pagination', 'rowselect', 'domReady!'], function($, uikit, RowSelect) {
 
-    var form         = $('#js-vocabularies'),
+    var form         = $('#js-terms'),
         showOnSelect = form.find('.js-show-on-select').addClass('uk-hidden'),
         table        = $('.js-table', form).on('selected-rows', function(e, rows) { showOnSelect.toggleClass('uk-hidden', !rows.length); }),
         rowselect    = new RowSelect(table),
@@ -9,6 +9,7 @@ require(['jquery', 'uikit!pagination', 'rowselect', 'domReady!'], function($, ui
 
     // action button
     form.on('click', '[data-action]', function(e) {
+
         e.preventDefault();
 
         $.post($(this).data('action'), form.serialize(), function(data) {
@@ -43,4 +44,5 @@ require(['jquery', 'uikit!pagination', 'rowselect', 'domReady!'], function($, ui
     function selectPage(index) {
         pagination.data('pagination').selectPage(index);
     }
+
 });

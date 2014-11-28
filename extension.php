@@ -2,18 +2,19 @@
 
 return [
 
-    'main' => 'Mii\\Tag\\MiiTagExtension',
+    'main' => 'Mii\\Taxonomy\\MiiTaxonomyExtension',
 
     'autoload' => [
 
-        'Mii\\Tag\\' => 'src'
+        'Mii\\Taxonomy\\' => 'src'
 
     ],
 
     'resources' => [
 
         'export' => [
-            'view' => 'views'
+            'view' => 'views',
+            'asset' => 'assets'
         ]
 
     ],
@@ -22,41 +23,41 @@ return [
 
     'menu' => [
 
-      'miiTag' => [
-        'label'  => 'miiTag',
-        'icon'   => 'extension://miitag/extension.png',
-        'url'    => '@miiTag/admin/vocabulary',
-        'active' => '@miiTag/admin/vocabulary*',
-        'access' => 'miiTag: manage vocabularies || miiQA: manage tags',
+      'miiTaxonomy' => [
+        'label'  => 'miiTaxonomy',
+        'icon'   => 'extension://miitaxonomy/extension.png',
+        'url'    => '@miiTaxonomy/admin/vocabulary',
+        'active' => '@miiTaxonomy/admin/vocabulary*',
+        'access' => 'miiTaxonomy: manage vocabularies || miiQA: manage terms',
         'priority' => 0
       ],
-      'miiTag: answer list' => [
+      'miiTaxonomy: answer list' => [
         'label'  => 'Vocabularies',
-        'parent' => 'miiTag',
-        'url'    => '@miiTag/admin/vocabulary',
-        'active' => '@miiTag/admin/vocabulary*',
-        'access' => 'miiTag: manage vocabularies'
+        'parent' => 'miiTaxonomy',
+        'url'    => '@miiTaxonomy/admin/vocabulary',
+        'active' => '@miiTaxonomy/admin/vocabulary*',
+        'access' => 'miiTaxonomy: manage vocabularies'
       ],
-      'miiTag: tag list' => [
-        'label'  => 'Tags',
-        'parent' => 'miiTag',
-        'url'    => '@miiTag/admin/tag',
-        'active' => '@miiTag/admin/tag*',
-        'access' => 'miiTag: manage tags'
+      'miiTaxonomy: term list' => [
+        'label'  => 'Terms',
+        'parent' => 'miiTaxonomy',
+        'url'    => '@miiTaxonomy/admin/term',
+        'active' => '@miiTaxonomy/admin/term*',
+        'access' => 'miiTaxonomy: manage terms'
       ],
 
     ],
 
     'permissions' => [
 
-      'miiTag: manage settings' => [
+      'miiTaxonomy: manage settings' => [
         'title' => 'Manage settings'
       ],
-      'miiTag: manage vocabularies' => [
+      'miiTaxonomy: manage vocabularies' => [
         'title' => 'Manage vocabularies'
       ],
-      'miiTag: manage tags' => [
-        'title' => 'Manage tags'
+      'miiTaxonomy: manage terms' => [
+        'title' => 'Manage terms'
       ]
 
     ],
@@ -64,14 +65,14 @@ return [
 
     'defaults' => [
 
-      'index.items_per_page'  => 20,
+      'index_items_per_page'  => 15,
 
     ],
 
 
     'settings' => [
 
-        'system' => 'extension://miitag/views/admin/settings.razr'
+        'system' => 'extension://miitaxonomy/views/admin/settings.razr'
 
     ]
 

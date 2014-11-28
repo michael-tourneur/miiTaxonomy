@@ -1,8 +1,8 @@
 {
-    "name": "miiTag",
+    "name": "miiTaxonomy",
     "version": "0.0.1",
     "type": "extension",
-    "title": "miiTag",
+    "title": "miiTaxonomy",
     "description": "",
     "license": "",
     "authors": [

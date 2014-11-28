@@ -1,19 +1,19 @@
-@script('miiTaxonomy.admin-vocabulary-index', 'extension://miitaxonomy/assets/js/admin/vocabulary/index.js', 'requirejs')
+@script('miiTaxonomy.admin-term-index', 'extension://miitaxonomy/assets/js/admin/term/index.js', 'requirejs')
 
-<form id="js-vocabularies" class="uk-form" action="@url('@miiTaxonomy/admin/vocabulary')" method="post">
-
+<form id="js-terms" class="uk-form" action="@url('@miiTaxonomy/admin/term')" method="post">
+    
     @section('toolbar', 'show')
         <div class="uk-float-left">
 
-            <a class="uk-button uk-button-primary" href="@url('@miiTaxonomy/admin/vocabulary/add')">@trans('Add Vocabulary')</a>
-            <a class="uk-button pk-button-danger uk-hidden js-show-on-select" href="#" data-action="@url('@miiTaxonomy/admin/vocabulary/delete')">@trans('Delete')</a>
+            <a class="uk-button uk-button-primary" href="@url('@miiTaxonomy/admin/term/add', ['vocabulary' => $vocabulary.getId()])">@trans('Add Tag')</a>
+            <a class="uk-button pk-button-danger uk-hidden js-show-on-select" href="#" data-action="@url('@miiTaxonomy/admin/term/delete')">@trans('Delete')</a>
 
             <div class="uk-button-dropdown uk-hidden js-show-on-select" data-uk-dropdown="{ mode: 'click' }">
                 <button class="uk-button" type="button">@trans('More') <i class="uk-icon-caret-down"></i></button>
                 <div class="uk-dropdown uk-dropdown-small">
                     <ul class="uk-nav uk-nav-dropdown">
                         @foreach($statuses as $key => $status)
-                            <li><a href="#" data-action="@url('@miiTaxonomy/admin/vocabulary/status', ['status' => $key])">@($status)</a></li>
+                            <li><a href="#" data-action="@url('@miiTaxonomy/admin/term/status', ['status' => $key])">@($status)</a></li>
                         @endforeach
                     </ul>
                 </div>
@@ -34,10 +34,10 @@
         </div>
     @endsection
 
-    <p class="uk-alert uk-alert-info @( $vocabularies ? 'uk-hidden' : '' )">@trans('No vocabulary found.')</p>
+    <p class="uk-alert uk-alert-info @( $terms ? 'uk-hidden' : '' )">@trans('No term found.')</p>
 
     <div class="js-table uk-overflow-container">
-        @include('extension://miitaxonomy/views/admin/vocabulary/table.razr')
+        @include('extension://miitaxonomy/views/admin/term/table.razr')
     </div>
 
     <ul class="uk-pagination @( $total < 2 ? 'uk-hidden' : '' )" data-uk-pagination="{ pages: @( $total ) }"></ul>
@@ -45,5 +45,6 @@
     @token
 
     <input type="hidden" name="page" value="0">
+    <input type="hidden" name="vocabulary" value="@($vocabulary.getId())">
 
 </form>

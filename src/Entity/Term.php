@@ -6,9 +6,9 @@ use Pagekit\System\Entity\DataTrait;
 use Pagekit\Framework\Database\Event\EntityEvent;
 
 /**
-* @Entity(tableClass="@miitaxonomy_vocabularies")
+* @Entity(tableClass="@miitaxonomy_terms")
 */
-class Vocabulary
+class Term
 {
   use DataTrait;
 
@@ -28,9 +28,12 @@ class Vocabulary
   protected $description;
 
   /**
-   * @HasMany(targetEntity="Term", keyFrom="id", keyTo="vid")
+   * @HasOne(targetEntity="Vocabulary", keyFrom="vid", keyTo="id")
    */
-  protected $tags;
+  protected $vocabulary;
+
+  /** @Column(type="integer") */
+  protected $vid;
 
   /** @Column(type="integer") */
   protected $status = 0;
@@ -71,6 +74,21 @@ class Vocabulary
     return (strlen($description) > 150) ? substr($description, 0, 150).'...' : $description;
   }
 
+  public function getVocabularyId()
+  {
+    return $this->vocabulary_id;
+  }
+
+  public function setVocabularyId($vocabulary_id)
+  {
+    $this->vocabulary_id = $vocabulary_id;
+  }
+
+  public function getVocabulary()
+  {
+    return $this->vocabulary;
+  }
+
   public function getStatus()
   {
     return $this->status;
@@ -92,13 +110,8 @@ class Vocabulary
   {
     return [
       self::STATUS_DEACTIVATED    => __('Deactivated'),
-      self::STATUS_ACTIVATED      => __('Activated'),
+      self::STATUS_ACTIVATED        => __('Activated'),
     ];
-  }
-
-  public function getTags()
-  {
-    return $this->tags;
   }
 
 }

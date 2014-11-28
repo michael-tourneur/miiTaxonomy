@@ -1,11 +1,11 @@
-@script('miiTag.admin-vocabulary-edit', 'extension://miitag/assets/js/admin/vocabulary/edit.js', 'requirejs')
+@script('miiTaxonomy.admin-vocabulary-edit', 'extension://miitaxonomy/assets/js/admin/vocabulary/edit.js', 'requirejs')
 
-<form id="js-vocabulary" class="uk-form" action="@url('@miiTag/admin/vocabulary/save')" method="post">
+<form id="js-vocabulary" class="uk-form" action="@url('@miiTaxonomy/admin/vocabulary/save')" method="post">
 
     @section('toolbar', 'show')
         <div class="uk-float-left">
             <button class="uk-button uk-button-primary" type="submit">@trans('Save') <i class="uk-icon-spinner uk-icon-spin js-spinner uk-margin-small-left uk-hidden"></i></button>
-            <a class="uk-button js-cancel" href="@url('@miiTag/admin/vocabulary')" data-label="@trans('Close')">@( $vocabulary.id ? __('Close') : __('Cancel') )</a>
+            <a class="uk-button js-cancel" href="@url('@miiTaxonomy/admin/vocabulary')" data-label="@trans('Close')">@( $vocabulary.id ? __('Close') : __('Cancel') )</a>
         </div>
     @endsection
 

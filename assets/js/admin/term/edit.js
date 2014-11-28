@@ -1,6 +1,6 @@
 require(['jquery', 'system!locale', 'uikit!form-select,datepicker,autocomplete,timepicker', 'domReady!'], function($, system, uikit) {
 
-    var form = $('#js-vocabulary'), id = $('input[name="id"]', form), cancel = $('.js-cancel', form), spinner = $('.js-spinner', form);
+    var form = $('#js-term'), id = $('input[name="id"]', form), cancel = $('.js-cancel', form), spinner = $('.js-spinner', form);
 
     // form ajax saving
     form.on('submit', function(e) {

@@ -1,4 +1,4 @@
-<form class="uk-form uk-form-horizontal" action="@url('@system/extensions/savesettings', ['name' => 'miiTag'])" method="post">
+<form class="uk-form uk-form-horizontal" action="@url('@system/extensions/savesettings', ['name' => 'miiTaxonomy'])" method="post">
 
     <!-- your settings here -->
 
