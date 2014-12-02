@@ -100,6 +100,8 @@ class VocabularyController extends Controller
   */
   public function saveAction($id, $data)
   {
+
+
     try {
 
       if (!$vocabulary = $this->vocabularies->find($id)) {
@@ -109,6 +111,7 @@ class VocabularyController extends Controller
       }
 
       try {
+        $data['machine_name'] = $this->mechanize($data['name']);
         $this->vocabularies->save($vocabulary, $data);
       } catch (DBALException $e) {
         return ['message' => 'Something happens. Vocabulary cannot be saved.', 'error' => true];
@@ -187,5 +190,17 @@ class VocabularyController extends Controller
 
     return compact('message');
 
+  }
+
+  protected function mechanize($name)
+  {
+      $name = preg_replace('/\xE3\x80\x80/', ' ', $name);
+      $name = str_replace('-', ' ', $name);
+      $name = preg_replace('#[:\#\*"@+=;!><&\.%()\]\/\'\\\\|\[]#', "\x20", $name);
+      $name = str_replace('?', '', $name);
+      $name = trim(mb_strtolower($name, 'UTF-8'));
+      $name = preg_replace('#\x20+#', '-', $name);
+
+      return $name;
   }
 }

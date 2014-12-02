@@ -25,6 +25,9 @@ class Vocabulary
   protected $name;
 
   /** @Column(type="string") */
+  protected $machine_name;
+
+  /** @Column(type="string") */
   protected $description;
 
   /**
@@ -53,6 +56,16 @@ class Vocabulary
   public function setName($name)
   {
     $this->name = $name;
+  }
+
+  public function getMachineName()
+  {
+    return $this->machine_name;
+  }
+
+  public function setMachineName($machine_name)
+  {
+    $this->machine_name = $machine_name;
   }
 
   public function getDescription()
